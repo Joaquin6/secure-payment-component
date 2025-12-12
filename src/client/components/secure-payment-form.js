@@ -32,10 +32,11 @@ export default class SecurePaymentForm extends HTMLElement {
         this.shadowRoot.innerHTML = `
         <style>
             :host {
+                margin-inline: auto;
                 display: block;
                 max-width: 400px;
                 border-radius: 10px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.5);
                 overflow: hidden;
                 background: #fff;
                 font-family: Arial, sans-serif;
@@ -64,6 +65,9 @@ export default class SecurePaymentForm extends HTMLElement {
         <div class="header">${title}</div>
         <div class="body">
             <slot></slot>
+            <iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                src="https://platform.twitter.com/widgets/tweet_button.html"
+                style="border: 0; width:130px; height:20px;"></iframe>
         </div>
         `;
     }

@@ -19,7 +19,7 @@ export default class App extends Component {
       <div>
         {username ? <h1>{`Hello ${username}`}</h1> : <h1>Loading.. please wait!</h1>}
         {/* <img src={ReactImage} alt="react" /> */}
-        <secure-payment-form title="Secure Payment Form">
+        <secure-payment-form>
           <p>This form is rendered using a Shadow DOM and a customizable title.</p>
         </secure-payment-form>
       </div>
