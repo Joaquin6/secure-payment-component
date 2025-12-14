@@ -192,50 +192,33 @@ export default class SecurePaymentForm extends HTMLElement {
           form.addEventListener('submit', (e) => {
             e.preventDefault();
             console.log(e);
+
             submitBtn.disabled = true;
             submitBtn.textContent = 'Processing...';
 
-            // Simulate payment processing
-            // setTimeout(() => {
-            //   window.parent.postMessage({
-            //     type: 'payment-success',
-            //     data: {
-            //       amount: 99.00,
-            //       last4: cardNumber.value.slice(-4),
-            //       timestamp: new Date().toISOString()
-            //     }
-            //   }, '*');
-              
-            //   form.reset();
-            //   submitBtn.disabled = false;
-            //   submitBtn.textContent = 'Pay $99.00';
-            // }, 2000);
-
-            const formValues = {
+            const payload = {
               cardNumber: cardNumber.value,
               expiryDate: expiry.value,
             };
 
-            console.log('Submitting Form Values: ', formValues);
-
             fetch('/api/submit', {
-                  method: "POST",
-                  headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(formValues)
-              })
+                method: 'POST',
+                headers: {
+                  'Accept': 'application/json, text/plain, */*',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
               .then(res => res.json())
-              .then(resObj => {
-                console.log(resObj);
+              .then(res => {
+                console.log(res);
+
                 window.parent.postMessage({
-                  type: 'payment-success',
+                  type: res.message,
                   data: {
                     amount: 99.00,
-                    last4: cardNumber.value.slice(-4),
                     timestamp: new Date().toISOString(),
-                    ...resObj
+                    ...res.data
                   }
                 }, '*');
 
