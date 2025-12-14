@@ -4,6 +4,8 @@ const os = require('os');
 const app = express();
 
 app.use(express.static('dist'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.post('/api/ping', (req, res) => res.json({ message: 'pong'}));
 app.post('/api/submit', (req, res) => {
