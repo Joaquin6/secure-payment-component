@@ -12,10 +12,18 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post('/api/ping', (req, res) => res.json({ message: 'pong'}));
 app.post('/api/submit', (req, res) => {
-    console.log('\nSubmitted Body: \n\t', req.body);
+    const payload = req.body || {};
+    console.log('\nSubmitted Body: \n\t', payload);
+
+    if (!payload.cardNumber) {
+        return res.status(400).send(new Error('Missing required field cardNumber'));
+    }
+    if (!payload.expiryDate) {
+        return res.status(400).send(new Error('Missing required field expiryDate'));
+    }
 
     const resObj = {
-        last4: req.body.cardNumber.slice(-4),
+        last4: payload.cardNumber.slice(-4),
         token: Utils.generateRandomToken() 
     };
     submittedPayments.push(resObj);

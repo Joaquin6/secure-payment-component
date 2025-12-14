@@ -20,7 +20,7 @@ export default class App extends Component {
             statusEl.className = 'status success show';
             statusEl.innerHTML = `
           <strong>✓ Payment Successful!</strong><br>
-          Amount: $${data.data.amount.toFixed(2)}<br>
+          Token: ${data.data.token}<br>
           Card ending in: ${data.data.last4}
         `;
 

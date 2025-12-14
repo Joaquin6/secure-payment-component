@@ -149,7 +149,7 @@ export default class SecurePaymentForm extends HTMLElement {
           </div>
           
           <button type="submit" id="submit-btn">
-            Pay $99.00
+            Submit Payment
           </button>
           
           <div class="secure-badge">
@@ -216,15 +216,29 @@ export default class SecurePaymentForm extends HTMLElement {
                 window.parent.postMessage({
                   type: 'payment-success',
                   data: {
-                    amount: 99.00,
                     timestamp: new Date().toISOString(),
-                    ...res.data
+                    ...res
                   }
                 }, '*');
 
                 form.reset();
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Pay $99.00';
+                submitBtn.textContent = 'Submit Payment';
+              })
+              .catch(err => {
+                console.error(err);
+
+                window.parent.postMessage({
+                  type: 'payment-error',
+                  data: {
+                    timestamp: new Date().toISOString(),
+                    ...err
+                  }
+                }, '*');
+
+                form.reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Payment';
               });
           });
         <\/script>
