@@ -214,7 +214,7 @@ export default class SecurePaymentForm extends HTMLElement {
                 console.log(res);
 
                 window.parent.postMessage({
-                  type: res.message,
+                  type: 'payment-success',
                   data: {
                     amount: 99.00,
                     timestamp: new Date().toISOString(),
