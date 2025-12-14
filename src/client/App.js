@@ -1,44 +1,63 @@
 import React, { Component } from 'react';
 import './app.css';
-// import ReactImage from './react.png';
-// import SecurePaymentForm from './components/secure-payment-form';
-import PaymentFormIframe from './components/payment-form-iframe';
+import SecurePaymentForm from './components/secure-payment-form';
 
 export default class App extends Component {
   state = { username: null };
 
-  componentDidMount() {
+  componentDidMount() {    
     fetch('/api/getUsername')
       .then(res => res.json())
       .then(user => this.setState({ username: user.username }))
-      .then(() => customElements.define('payment-form-iframe', PaymentFormIframe))
+      .then(() => customElements.define('secure-payment-form', SecurePaymentForm))
       .then(() => {
-        // Listen for messages from iframe
+        // Listen for messages from payment iframe
         window.addEventListener('message', (event) => {
-          if (event.data.type === 'payment-success') {
+          const data = event.data || {};
+          if (data.type === 'payment-success') {
+            console.log('Payment iframe Message Recieved: ', event);
             const statusEl = document.getElementById('status');
             statusEl.className = 'status success show';
             statusEl.innerHTML = `
           <strong>✓ Payment Successful!</strong><br>
-          Amount: $${event.data.data.amount.toFixed(2)}<br>
-          Card ending in: ${event.data.data.last4}
+          Amount: $${data.data.amount.toFixed(2)}<br>
+          Card ending in: ${data.data.last4}
         `;
 
             setTimeout(() => {
               statusEl.classList.remove('show');
             }, 5000);
           }
+
+          // // Example message contract from the PSP iframe:
+          // // { type: "ready" }
+          // // { type: "token_created", token: "tok_123" }
+          // // { type: "error", message: "Card declined" }
+
+          // if (data.type === "ready") {
+          //     payButton.disabled = false;
+          // }
+
+          // if (data.type === "token_created") {
+          //     errorEl.textContent = "";
+          //     tokenInput.value = data.token; // put token in hidden input
+          //     form.submit();                 // submit to your backend
+          // }
+
+          // if (data.type === "error") {
+          //     errorEl.textContent = data.message || "Payment error";
+          //     payButton.disabled = false;
+          // }
         });
       })
-    // .then(() => customElements.define('secure-payment-form', SecurePaymentForm))
   }
 
   render() {
     const { username } = this.state;
+
     return (
       <div className="container">
         {username ? <h1>{`Hello ${username}`}</h1> : <h1>Loading.. please wait!</h1>}
-
         <div className="card">
           <div className="header">
             <h1>🔒 Secure Payment</h1>
@@ -46,7 +65,7 @@ export default class App extends Component {
           </div>
           <div className="content">
             <div className="iframe-container">
-              <payment-form-iframe height="400"></payment-form-iframe>
+              <secure-payment-form height="400"></secure-payment-form>
             </div>
             <div className="info">
               <strong>ℹ️ Demo Mode:</strong> This is a demonstration. No real payment will be processed.
@@ -54,11 +73,6 @@ export default class App extends Component {
             <div id="status" className="status"></div>
           </div>
         </div>
-
-        {/* <img src={ReactImage} alt="react" /> */}
-        {/* <secure-payment-form title="Secure Payment Form">
-          <p>This form is rendered using a Shadow DOM and a customizable title.</p>
-        </secure-payment-form> */}
       </div>
     );
   }
