@@ -1,6 +1,7 @@
 const express = require('express');
 const os = require('os');
-const Utils = require('./utils');
+
+const Utils = require('./libs/utils');
 
 const submittedPayments = [];
 const app = express();
