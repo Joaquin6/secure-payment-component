@@ -148,13 +148,13 @@ const os = require("os");
 const app = express();
 
 app.use(express.static("dist"));
-app.get("/api/getUsername", (req, res) =>
+app.get("/api/username", (req, res) =>
   res.send({ username: os.userInfo().username })
 );
 app.listen(3000, () => console.log("Listening on port 3000!"));
 ```
 
-This starts a server and listens on port 3000 for connections. The app responds with `{username: <username>}` for requests to the URL (/api/getUsername). It is also configured to serve the static files from **dist** directory.
+This starts a server and listens on port 3000 for connections. The app responds with `{username: <username>}` for requests to the URL (/api/username). It is also configured to serve the static files from **dist** directory.
 
 ## Concurrently
 
